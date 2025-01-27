@@ -105,6 +105,11 @@
                 <input type="text" id="ifsc" name="ifsc" placeholder="XXXX0XXXXXX" required>
             </div>
 
+            <div class="form-group">
+                <label for="reference">Reference Person (Optional)</label>
+                <input type="text" id="reference" name="reference" placeholder="Reference person's name">
+            </div>
+
             <div class="note">
                 <strong>Note:</strong> Please provide a secondary email ID that can be used to login by us whenever required.
             </div>
@@ -123,6 +128,7 @@
             const bankName = document.getElementById('bankName').value.trim();
             const accountNumber = document.getElementById('accountNumber').value.trim();
             const ifsc = document.getElementById('ifsc').value.toUpperCase().trim();
+            const reference = document.getElementById('reference').value.trim();
 
             // Validate Name (must be 3 words)
             if (name.split(' ').length !== 3) {
@@ -138,16 +144,21 @@
             }
 
             // Prepare WhatsApp message
-            const message = `*Account Opening Form*%0A%0A` +
-                            `*Name:* ${name}%0A` +
-                            `*Mobile:* ${mobile}%0A` +
-                            `*Email:* ${email}%0A` +
-                            `*Aadhar:* ${aadhar}%0A` +
-                            `*Date of Birth:* ${dob}%0A%0A` +
-                            `*Bank Details*%0A` +
-                            `*Bank Name:* ${bankName}%0A` +
-                            `*Account Number:* ${accountNumber}%0A` +
-                            `*IFSC:* ${ifsc}%0A`;
+            let message = `*Account Opening Form*%0A%0A` +
+                          `*Name:* ${name}%0A` +
+                          `*Mobile:* ${mobile}%0A` +
+                          `*Email:* ${email}%0A` +
+                          `*Aadhar:* ${aadhar}%0A` +
+                          `*Date of Birth:* ${dob}%0A%0A` +
+                          `*Bank Details*%0A` +
+                          `*Bank Name:* ${bankName}%0A` +
+                          `*Account Number:* ${accountNumber}%0A` +
+                          `*IFSC:* ${ifsc}%0A`;
+
+            // Add reference person if provided
+            if (reference) {
+                message += `%0A*Reference Person:* ${reference}%0A`;
+            }
 
             const whatsappUrl = `https://wa.me/918329987567?text=${message}`;
             window.location.href = whatsappUrl;
