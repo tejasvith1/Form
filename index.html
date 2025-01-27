@@ -71,6 +71,10 @@
                 <input type="text" id="name" name="name" placeholder="First Middle Last" required>
             </div>
             <div class="form-group">
+                <label for="pan">PAN</label>
+                <input type="text" id="pan" name="pan" placeholder="ABCDE1234F" maxlength="10" required>
+            </div>
+            <div class="form-group">
                 <label for="mobile">Mobile Number</label>
                 <input type="tel" id="mobile" name="mobile" placeholder="10-digit number" maxlength="10" required>
             </div>
@@ -121,6 +125,7 @@
     <script>
         function sendToWhatsApp() {
             const name = document.getElementById('name').value.trim();
+            const pan = document.getElementById('pan').value.trim().toUpperCase();
             const mobile = document.getElementById('mobile').value.trim();
             const email = document.getElementById('email').value.trim();
             const aadhar = document.getElementById('aadhar').value.trim();
@@ -136,6 +141,13 @@
                 return false;
             }
 
+            // Validate PAN (must follow format ABCDE1234F)
+            const panRegex = /^[A-Z]{5}\d{4}[A-Z]{1}$/;
+            if (!panRegex.test(pan)) {
+                alert('PAN must be in the format ABCDE1234F.');
+                return false;
+            }
+
             // Validate Aadhar (must be in 0000 0000 0000 format)
             const aadharRegex = /^\d{4}\s\d{4}\s\d{4}$/;
             if (!aadharRegex.test(aadhar)) {
@@ -146,6 +158,7 @@
             // Prepare WhatsApp message
             let message = `*Account Opening Form*%0A%0A` +
                           `*Name:* ${name}%0A` +
+                          `*PAN:* ${pan}%0A` +
                           `*Mobile:* ${mobile}%0A` +
                           `*Email:* ${email}%0A` +
                           `*Aadhar:* ${aadhar}%0A` +
@@ -178,6 +191,18 @@
         document.getElementById('ifsc').addEventListener('input', function (event) {
             event.target.value = event.target.value.toUpperCase();
         });
+
+        document.getElementById('pan').addEventListener('input', function (event) {
+            let input = event.target.value.toUpperCase();
+            event.target.value = input.replace(/[^A-Z0-9]/g, '').slice(0, 10); // Ensure only valid PAN characters
+        });
+
+        document.getElementById('aadhar').addEventListener('input', function (event) {
+            let input = event.target.value.replace(/[^0-9]/g, '').slice(0, 12);
+            input = input.replace(/(.{4})(?=.)/g, '$1 '); // Format as 0000 0000 0000
+            event.target.value = input;
+        });
     </script>
 </body>
 </html>
+
